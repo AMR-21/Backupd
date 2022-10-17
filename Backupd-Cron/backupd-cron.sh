@@ -3,9 +3,11 @@
 # Directories data
 data=('dir' 'max')
 
+# Initializations
+mkdir backups
 cd ./Backupd-Cron
 
-# Configure file
+# Configure file and variables initializations
 config='config.cfg'
 
 i=0
