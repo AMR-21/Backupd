@@ -59,6 +59,8 @@ Desktop/
 
 ## Usage
 
+### Method 1 - Makefile (recommended)
+
 Consider the following steps to run the script:
 
 1 Open the Backupd directory in the terminal
@@ -69,7 +71,7 @@ Consider the following steps to run the script:
  ../Backupd$ make
 ```
 
-3 You will be asked to enter some data
+3 You will be asked to enter some data, like this:
 
 ```bash
 Source directory name: test
@@ -98,6 +100,16 @@ Backup complete at 2022-10-17-00-48-45 under backup
 test modified
 Backup underway ...
 Backup complete at 2022-10-17-00-52-37 under backup
+```
+
+### Method 2 - Terminal
+
+1 Open the Backupd directory in the terminal
+
+2 Type ./backupd.sh and pass needed arguments in the following order:
+
+```bash
+ ../Backupd$ ./backupd.sh source backupdir interval maximum
 ```
 
 ## License

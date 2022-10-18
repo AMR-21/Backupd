@@ -1,30 +1,31 @@
-# Backupd
+# Backupd - Cron
 
-Backupd is a Shell Script for backing up files upon modifications.
+Backupd - Cron is an automated Shell Script for backing up files upon modifications.
 
 ## Overview
 
-The script is designed to watch a directory and check for modifications on a given interval of time (in seconds). Once a modification is spotted it will we backed-up to the specified backup directory. Along with the code, there is a Makefile to receive inputs, validate them, and run the script.  
+The script is designed to watch a directory and check for modifications on a given durations using cron job, learn more about [cron jobs](https://www.freecodecamp.org/news/cron-jobs-in-linux). Once a modification is spotted it will we backed-up to the backups directory.
 The code directory contains the following files:
 
 ```markdown
 Backupd/
 ├── backupd.sh
-├── Makefile
-└── README.md
+└── config.cfg
 ```
 
-The program does not require any perquisites
+The program requires cron to be on the machine, you can see the steps of cron installation/verification below
 
 ## Installation
 
-Download the whole code as a zip and unzip it in the parent directory of the target directory, just like the following hierarchy:
+### Backupd-Cron
+
+Download the whole code as a zip and unzip it in the root directory in your system (eg. Home in Ubuntu), and also the source directory in the root, just like the following hierarchy:
 
 ```markdown
-parent/
-├── Backupd/
-│ ├── backupd.sh
-│ ├── Makefile
+root/
+├── Backupd-Cron/
+│ ├── backupd-cron.sh
+│ ├── config.cfg
 │ └── README.md
 │
 └── backup me/
@@ -33,10 +34,10 @@ parent/
 To clarify it, assume we want to backup a directory on the desktop called Test with file [ a.txt b.txt c.txt ], so the correct hierarchy should be:
 
 ```markdown
-Desktop/
-├── Backupd/
-│ ├── backupd.sh
-│ ├── Makefile
+root/
+├── Backupd-Cron/
+│ ├── backupd-cron.sh
+│ ├── config.cfg
 │ └── README.md
 │
 ├── Test/
@@ -46,58 +47,75 @@ Desktop/
 └──
 ```
 
-### Optional
+#### Optional
 
-You can create the backup directory manually on the same level as Backupd directory and the target directory:
+You can create the backup directory named backups manually on the root directory:
 
 ```markdown
-Desktop/
+root/
 ├── Backupd/
 ├── Test/
-└── backupdir/
+└── backups/
+```
+
+### Cron
+
+Following steps work on linux only
+
+1 Open the terminal and type the following
+
+```bash
+ $ crontab -e
+```
+
+2 If your are not allowed to access crontab, modify the access, then restart the terminal, otherwise jump to next step 3
+
+```bash
+ $ sudo cat cron.allow $user
+```
+
+3 Restart the terminal then add cron jobs to the linux:
+
+```bash
+ $ sudo systemctl status cron.service
+```
+
+4 Type crontab -e to add the backupd job (if prompted, select option 1)
+
+```bash
+ $ crontab -e
+```
+
+5 Navigate to the end of text shown and add the job like the following:
+
+```bash
+ * * * * * ~/Backupd-Cron/backupd-cron.sh
+```
+
+6 To generate the interval of repetition you can use [crontab guru](https://crontab.guru/#*_*_*_*_*), for example to run the backup every 3rd Friday
+of the month at 12:31 am, it will be as the following:
+
+```bash
+ 31 0 3 * fri ~/Backupd-Cron/backupd-cron.sh
+```
+
+7 Save and exit
+
+8 You can check that your cron job is working by typing:
+
+```bash
+ $ crontab -l
 ```
 
 ## Usage
 
-Consider the following steps to run the script:
+1 Open the config.cfg file
 
-1 Open the Backupd directory in the terminal
+2 Type the name of source directory and maximum number allowed of backups, for example:
 
-2 Type make
-
-```bash
- ../Backupd$ make
-```
-
-3 You will be asked to enter some data
-
-```bash
-Source directory name: test
-Backup directory name: backup
-Interval between backup checks (secs): 5
-Maximum number of backups: 5
-```
-
-### Notes
-
-- You have to make sure that the source directory exists on the same hierarchal level as the Backupd
-- If you entered a non existing backup directory name, a new one will be created automatically with same name after 5 seconds (automated).
-- Interval and Maximum values should be integers
-
-4 Once you are done, you will see a message like this
-
-```bash
-./backupd.sh test backup 5 5
-Backup complete at 2022-10-17-00-48-45 under backup
-
-```
-
-5 When a modification occurs in the watched directory, it will be backed-up to the backup directory in folder named with date modification and you see a message like this
-
-```bash
-test modified
-Backup underway ...
-Backup complete at 2022-10-17-00-52-37 under backup
+```cfg
+test
+10
 ```
 
 ## License
